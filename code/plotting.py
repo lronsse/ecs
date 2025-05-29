@@ -29,8 +29,8 @@ def main():
     plt.scatter(x_c, y_c,   s=50, color='red', marker='o', label='Detected corners')
 
     # Labels & legend
-    plt.xlabel('X [m]')
-    plt.ylabel('Y [m]')
+    plt.xlabel('X [mm]')
+    plt.ylabel('Y [mm]')
     plt.title('LiDAR Scan with Detected Corners')
     plt.axis('equal')
     plt.legend(loc='upper right')
