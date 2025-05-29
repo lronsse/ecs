@@ -60,48 +60,23 @@ The project also includes a Python script (`plotting.py`) to visualize these out
     ```
     After this step, you should find the executable `cornerDetection` inside the `build` directory.
 
-## Running the Program
+## Running the Program and Plotting Results
 
-### C Executable
+After successfully building the project using `make` in the `build` directory:
 
-1.  **Ensure `LidarData.csv` is accessible:**
-    The C program (`cornerDetection`) expects to find `src/LidarData.csv` relative to the directory where `CMakeLists.txt` is located (i.e., the `code` directory). The executable, however, runs from the `build` directory.
-    To make this work correctly as configured, the `main.c` file has been updated to look for `../src/LidarData.csv` when the program is run from the `build` directory.
-    *(Self-correction: I need to verify if `main.c` was actually updated to look for `../src/LidarData.csv`. If not, the README should instruct to copy `LidarData.csv` or run from the `code` dir, or I should modify `main.c` path. For now, let's assume `main.c` is modified or adjust the path in `main.c` as part of this overall task if possible. Given the subtask is just to write the README, I will write the README assuming the path in `main.c` for `LidarData.csv` is `../src/LidarData.csv` when run from `build` dir or that `main.c` is modified to use this path).*
-
-    **Update (Post-Subtask Thought):** I will ensure `main.c` uses `../src/LidarData.csv` in a subsequent step if it doesn't already. For now, the README will reflect this intended setup.
-
-2.  **Run the executable:**
-    From the `build` directory:
+1.  **Run the C executable and generate plots automatically:**
+    While still in the `build` directory, use the following command:
     ```bash
-    ./cornerDetection
+    make run_and_plot
     ```
-    This will generate/overwrite `lidarDataCartesian.csv` and `outputCorners.csv` in the `build` directory.
-    *(Self-correction: The C code writes output files to the current working directory. If run from `build`, they'll be in `build`. If `plotting.py` is in `code`, it won't find them. This needs to be harmonized. The output files should ideally go to the `code` directory or `plotting.py` should be run from `build` or be told where the files are. Let's state that output files are in `build` and `plotting.py` should be run accordingly or files copied).*
+    This command will:
+    *   Ensure the `cornerDetection` executable is up-to-date.
+    *   Run `cornerDetection`. It reads data from `../src/LidarData.csv` (relative to the `build` directory) and generates `lidarDataCartesian.csv` and `outputCorners.csv` in the `build` directory.
+    *   Automatically copy these two CSV files to the `code` directory.
+    *   Automatically execute the `plotting.py` script from the `code` directory to visualize the results.
 
-    **Update (Post-Subtask Thought):** The `plotting.py` script expects files in its own directory. The easiest is to instruct the user to run `cornerDetection` from the `code` directory if possible, or copy files.
-    Let's adjust the README for running from `build` and then copying files to `code` for plotting.
+2.  **Prerequisites for Plotting:**
+    *   Python 3
+    *   Matplotlib (`pip install matplotlib`)
 
-    **Revised Running Instructions for README:**
-    From the `build` directory:
-    ```bash
-    ./cornerDetection
-    ```
-    This will generate `lidarDataCartesian.csv` and `outputCorners.csv` in the `build` directory.
-
-### Plotting Script
-
-1.  **Copy output CSVs to `code` directory (if not already there):**
-    After running `cornerDetection`, copy `lidarDataCartesian.csv` and `outputCorners.csv` from the `build` directory to the `code` directory where `plotting.py` is located.
-    ```bash
-    cp lidarDataCartesian.csv ../lidarDataCartesian.csv
-    cp outputCorners.csv ../outputCorners.csv
-    ```
-    (Alternatively, modify `plotting.py` to take paths as arguments or look in `../build/`)
-
-2.  **Run the Python plotting script:**
-    Navigate to the `code` directory (if you're not already there) and run:
-    ```bash
-    python3 plotting.py
-    ```
-    This will display a plot of the Lidar scan points and the detected corners. Ensure you have Python 3 and Matplotlib installed (`pip install matplotlib`).
+    If `plotting.py` fails to run, ensure you have these installed. The CMake configuration step (`cmake ..`) will also try to find Python 3.
