@@ -13,9 +13,9 @@ def read_csv_xy(filename):
     return xs, ys
 
 def main():
-    # Filenames exported by your C program
-    scan_file    = 'lidarDataCartesian.csv'
-    corners_file = 'outputCorners.csv'
+    # Filenames exported by your C program, now in data/ subdirectory
+    scan_file    = 'data/lidarDataCartesian.csv'
+    corners_file = 'data/outputCorners.csv'
 
     # Load data
     x_all, y_all       = read_csv_xy(scan_file)
