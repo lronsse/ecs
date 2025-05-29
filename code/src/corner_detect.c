@@ -102,7 +102,7 @@ Point *detect_corners_polar(const Point *polar_points, size_t n,
         double d1 = norm2(c_cur.x - c_prev.x, c_cur.y - c_prev.y);
         double d2 = norm2(c_next.x - c_cur.x, c_next.y - c_cur.y);
         if (d1 > dist_thresh || d2 > dist_thresh) {
-            prev_corner = 0;
+            // prev_corner is NOT changed here, consistent with Python version
             continue;
         }
         double ang = calculate_angle_between_polar_vectors(
@@ -120,7 +120,23 @@ Point *detect_corners_polar(const Point *polar_points, size_t n,
     }
 
     *out_n = cnt;
-    return corners;
+    // Optimize memory allocation: shrink the array to the actual number of corners.
+    if (cnt == 0) {
+        // If no corners were found, free the initial allocation and return NULL.
+        free(corners);
+        return NULL;
+    }
+    
+    Point *resized_corners = realloc(corners, cnt * sizeof(Point));
+    if (resized_corners == NULL) {
+        // Realloc failed (unlikely when shrinking, but handle defensively).
+        // Return the original oversized 'corners' array to avoid data loss.
+        // *out_n is already set to cnt.
+        return corners;
+    }
+    
+    // Realloc succeeded, return the correctly sized array.
+    return resized_corners;
 }
 
 // Compare by theta
