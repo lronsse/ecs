@@ -1,0 +1,12 @@
+{
+    "min_radius": 280,
+    "max_radius": 3000,
+    "angle_range_degrees": 30,
+    "span": 6,
+    "match_threshold_mm": 80,
+    "angle_target_degrees": 90,
+    "angle_grouping_threshold_degrees": 0.5,
+    "min_corner_distance_mm": 50,
+    "memory_length": 5
+  }
+  
