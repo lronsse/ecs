@@ -2,23 +2,29 @@ cmake_minimum_required(VERSION 3.10)
 project(CornerDetectionProject C)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -g") # Add warning and debug flags
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -g")
 
-# Explicitly list source files relative to CMAKE_CURRENT_SOURCE_DIR (which is code/)
+find_package(Python3 COMPONENTS Interpreter)
+
 set(SOURCES
     src/main.c
     src/csv_reader.c
     src/corner_detect.c
 )
 
-# Add the executable target
 add_executable(cornerDetection ${SOURCES})
-
-# Link the math library
 target_link_libraries(cornerDetection PRIVATE m)
 
-# Optional: Print a message after successful build
-add_custom_target(BuildMessage ALL
-    COMMAND ${CMAKE_COMMAND} -E echo "Build complete. Executable is at ./cornerDetection"
+add_custom_target(run_and_plot
+    COMMAND ${CMAKE_BINARY_DIR}/cornerDetection
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/lidarDataCartesian.csv
+            ${CMAKE_SOURCE_DIR}/lidarDataCartesian.csv
+    COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/outputCorners.csv
+            ${CMAKE_SOURCE_DIR}/outputCorners.csv
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/plotting.py
     DEPENDS cornerDetection
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Running cornerDetection, copying CSVs, and then launching plotting.py"
 )

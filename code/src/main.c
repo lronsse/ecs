@@ -43,7 +43,6 @@
 
 static const char *CSV_FILE = "../src/LidarData.csv"; // lidar scan filename (path relative to build dir)
 
-
 #define memory_length 5 // Unrelated to this task, kept.
 
 #define MAX_ROWS        10000
@@ -196,13 +195,18 @@ int main(void) {
     }
 
     free(ranges);
-    free(polar); // polar is already freed and set to NULL above. If block not entered, it's freed here.
-                 // Defensive free: if polar is NULL, free(NULL) is a no-op.
+    // polar was freed and set to NULL after 'masked' was created.
     free(masked);
     free(raw_corners);
-    free(reduced);
-    free(final_corners);
-    // free(x) and free(y) are removed as x and y arrays are no longer used.
+
+    // Conditionally free 'reduced' only if it's different from 'final_corners'
+    // to prevent a double-free if remove_close_corners_by_distance returned 'reduced' directly.
+    if (reduced != final_corners) {
+        free(reduced);
+    }
+    free(final_corners); // Safe for NULL, necessary for distinct valid pointers.
+    
+    // free(x) and free(y) were removed in a previous step as the arrays are no longer used.
 
     //system("python3 ../plotting.py");
     return EXIT_SUCCESS;
