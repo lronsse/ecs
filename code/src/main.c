@@ -43,6 +43,7 @@
 
 static const char *CSV_FILE = "../src/LidarData.csv"; // lidar scan filename (path relative to build dir)
 
+
 #define memory_length 5 // Unrelated to this task, kept.
 
 #define MAX_ROWS        10000
