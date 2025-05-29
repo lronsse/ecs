@@ -41,7 +41,8 @@
 #define LIDAR_SCAN_START_DEGREES 0.0
 #define LIDAR_SCAN_END_DEGREES 240.0
 
-static const char *CSV_FILE = "lidarData.csv"; // lidar scan filename
+static const char *CSV_FILE = "../src/LidarData.csv"; // lidar scan filename (path relative to build dir)
+
 
 #define memory_length 5 // Unrelated to this task, kept.
 

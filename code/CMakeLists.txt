@@ -1,24 +1,24 @@
 cmake_minimum_required(VERSION 3.10)
-project(cornerDetection C)
+project(CornerDetectionProject C)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -g") # Add warning and debug flags
 
-# Set the path to the source directory
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
-
-# List your source files with their relative path
+# Explicitly list source files relative to CMAKE_CURRENT_SOURCE_DIR (which is code/)
 set(SOURCES
-    ${SRC_DIR}/main.c
-    ${SRC_DIR}/csv_reader.c
-    ${SRC_DIR}/corner_detect.c
+    src/main.c
+    src/csv_reader.c
+    src/corner_detect.c
 )
 
-add_executable(lidar_extraction ${SOURCES})
-target_link_libraries(lidar_extraction m)
+# Add the executable target
+add_executable(cornerDetection ${SOURCES})
 
-# Custom target to run the executable after building
-add_custom_target(run
-    COMMAND cornerDetection
+# Link the math library
+target_link_libraries(cornerDetection PRIVATE m)
+
+# Optional: Print a message after successful build
+add_custom_target(BuildMessage ALL
+    COMMAND ${CMAKE_COMMAND} -E echo "Build complete. Executable is at ./cornerDetection"
     DEPENDS cornerDetection
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
